@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B3B35">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HYROX">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Hyrox · Alex</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icono-180.png">
+  <link rel="icon" href="icono-180.png">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div class="marca"><span class="logo">H</span>
+      <div><div class="sobre">Plan de Alex</div><div class="titulo-app">Hyrox · mesociclos</div></div>
+    </div>
+    <div class="acciones-cab">
+      <button class="boton-icono" data-accion="recargar" aria-label="Actualizar datos">⟳</button>
+      <button class="boton-icono" data-accion="vista" data-vista="ajustes" aria-label="Ajustes">⚙</button>
+    </div>
+  </header>
+  <main id="principal"></main>
+  <nav class="barra" id="barra">
+    <button data-accion="vista" data-vista="plan"><span class="ico">▦</span>Plan</button>
+    <button data-accion="vista" data-vista="apuntar"><span class="ico">✎</span>Apuntar</button>
+    <button data-accion="vista" data-vista="gemelo"><span class="ico">♡</span>Gemelo</button>
+    <button data-accion="vista" data-vista="tecnica"><span class="ico">▶</span>Técnica</button>
+    <button data-accion="vista" data-vista="progreso"><span class="ico">↗</span>Progreso</button>
+  </nav>
+  <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+  <script src="lector.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

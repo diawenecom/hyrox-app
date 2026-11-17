@@ -1,0 +1,13 @@
+{
+  "name": "Hyrox · Alex",
+  "short_name": "HYROX",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#EEF4F1",
+  "theme_color": "#0B3B35",
+  "lang": "es",
+  "icons": [
+    { "src": "icono-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
