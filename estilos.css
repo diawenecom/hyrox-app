@@ -108,3 +108,5 @@ tr.actual td { background: var(--menta); }
 svg text { font-size: 10px; fill: var(--suave); }
 .pie-chat { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
 .pie-chat .boton { margin: 0; flex: 1; padding: 10px; }
+.chat .micro { background: #fff; color: var(--verde); border: 1px solid var(--linea); }
+.chat .micro.activo { background: var(--rojo); color: #fff; border-color: var(--rojo); }

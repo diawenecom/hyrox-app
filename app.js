@@ -6,6 +6,31 @@ const DIAS = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "
 const DIAS_CORTO = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 const MODO_LOCAL = new URLSearchParams(location.search).has("local");
+const Reconocimiento = window.SpeechRecognition || window.webkitSpeechRecognition;
+const HAY_VOZ = !!Reconocimiento;
+let escuchando = null;
+
+/* micrófono: escucha, escribe lo que oye en la caja y al terminar rellena solo */
+function microfono(boton) {
+  if (escuchando) { escuchando.stop(); return; }
+  const caja = document.querySelector("#dictado");
+  const r = new Reconocimiento();
+  r.lang = "es-ES"; r.interimResults = true; r.continuous = false;
+  const previo = caja.value ? caja.value.trim() + " " : "";
+  r.onresult = (ev) => {
+    let t = ""; for (const res of ev.results) t += res[0].transcript;
+    caja.value = previo + t;
+  };
+  r.onerror = (ev) => {
+    aviso(ev.error === "not-allowed" ? "No tengo permiso para el micrófono. Usa el micrófono del teclado." : "No te he oído bien. Prueba otra vez.");
+  };
+  r.onend = () => {
+    escuchando = null; boton.classList.remove("activo"); boton.textContent = "🎤";
+    if (caja.value.trim()) document.querySelector('[data-accion="dictar"]').click();
+  };
+  escuchando = r; boton.classList.add("activo"); boton.textContent = "■";
+  try { r.start(); aviso("Te escucho… dicta el ejercicio."); } catch (e) { escuchando = null; aviso("No puedo usar el micrófono aquí. Usa el del teclado."); }
+}
 
 /* ---------- almacenamiento del navegador (siempre con try/catch) ---------- */
 const guarda = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } };
@@ -347,7 +372,8 @@ function vApuntar() {
     <div class="tarjeta"><label class="campo">Nota de la sesión<textarea data-campo="notas" rows="2">${esc(a.notas)}</textarea></label></div>
     <div class="chat">
       ${a.historial.length ? `<div class="historial">${a.historial.slice(-2).map((h) => `<div>«${esc(h)}»</div>`).join("")}</div>` : ""}
-      <div class="entrada"><textarea id="dictado" rows="1" placeholder="Dicta el ejercicio: «Prensa, serie 1, 120 kilos, 12 repes, RIR 3…»"></textarea>
+      <div class="entrada">${HAY_VOZ ? `<button class="enviar micro" data-accion="micro" aria-label="Hablar">🎤</button>` : ""}
+        <textarea id="dictado" rows="1" placeholder="Habla o escribe: «Prensa, serie 1, 120 kilos, 12 repes, RIR 3…»"></textarea>
         <button class="enviar" data-accion="dictar" aria-label="Rellenar">➤</button></div>
       <div class="pie-chat"><button class="boton" data-accion="guardar">Guardar sesión</button>
         <button class="enlace" data-accion="cancelar-apunte">Hoy no entreno</button></div>
@@ -586,6 +612,7 @@ document.addEventListener("click", async (ev) => {
     aplicaDictado(t); guardaBorrador(); pinta();
     const d = $("#dictado"); if (d) d.focus();
   }
+  else if (acc === "micro") { microfono(b); }
   else if (acc === "guardar") { await guardarApunte(); }
   else if (acc === "mas-serie") { const x = datosEj(b.dataset.ej); x.series = x.series && x.series.length ? x.series : [{}]; x.series.push({}); guardaBorrador(); pinta(); }
   else if (acc === "quitar-serie") { const x = datosEj(b.dataset.ej); if (x.series) x.series.splice(+b.dataset.i, 1); guardaBorrador(); pinta(); }
